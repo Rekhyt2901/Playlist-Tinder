@@ -1,0 +1,40 @@
+/* $theme-colors: (
+    "light":      #f8f9fa,
+    "dark":       #212529,
+    "lighterdark": #212529,
+    "primary":    #0d6efd,
+    "secondary":  #6c757d,
+    "info":       #0dcaf0,
+    "success":    #198754,
+    "warning":    #ffc107,
+    "danger":     #dc3545,
+); */
+
+/* $theme-colors: (
+    "light":      #e7edf0,
+    "dark":       #2b2b35,
+    "primary":    #1fba93,
+    "secondary":  #005844,
+    "info":       #00d5ff,
+
+    "success":    #198754,
+    "warning":    #ffc107,
+    "danger":     #dc3545,
+); */
+
+@import "/node_modules/bootstrap/scss/bootstrap.scss";
+
+/* 
+$alight: map-get($map: $theme-colors, $key: "light");
+$adark: map-get($map: $theme-colors, $key: "dark");
+$aprimary: map-get($map: $theme-colors, $key: "primary");
+$asecondary: map-get($map: $theme-colors, $key: "secondary");
+$ainfo: map-get($map: $theme-colors, $key: "info");
+$asuccess: map-get($map: $theme-colors, $key: "success");
+$awarning: map-get($map: $theme-colors, $key: "warning");
+$adanger: map-get($map: $theme-colors, $key: "danger");
+
+$text1: #ccd6f6;
+$text2: #ACB3C3;
+$text3: #C4C8D4; */
+

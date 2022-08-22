@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Playlist Tinder</title>
+
+    <link rel="stylesheet" href="./styles.scss">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #profile-picture {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 100%;
+        }
+
+        #github-icon {
+            font-size: 3rem;
+            color: white;
+        }
+
+        #sidebar {
+            min-height: 100vh;
+            height: 100vh;
+            background-color: crimson;
+            color: white;
+            width: 100px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 98;
+            flex-direction: column;
+        }
+
+        .wrapper {
+            padding-left: 100px;
+        }
+
+        @media only screen and (max-width: 576px) {
+            #sidebar {
+                min-height: unset;
+                height: 50px;
+                width: 100vw;
+                min-width: 100vw;
+                top: unset;
+                bottom: 0;
+                left: 0;
+                flex-direction: row;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            .wrapper {
+                padding-bottom: 50px;
+                padding-left: 0;
+            }
+
+            #profile-picture {
+                width: 2rem;
+                height: 2rem;
+                border-radius: 100%;
+            }
+
+            #github-icon {
+                font-size: 2rem;
+                color: white;
+            }
+        }
+
+
+
+
+        #playlists {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .playlist {
+            min-width: 140px;
+            display: flex;
+            flex-direction: column;
+            transition: margin-top 0.3s;
+        }
+
+        .playlist-image {
+            width: 100%;
+            height: auto;
+            transition: box-shadow 0.2s, all 0.3s;
+        }
+
+
+
+        .playlist:hover {
+            margin-top: 0.3rem;
+            text-decoration: underline;
+        }
+
+        .playlist:hover p:nth-child(2) {
+            margin-top: 0.2rem;
+        }
+
+        .playlist p:nth-child(2) {
+            transition: margin-top 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .playlist:hover img {
+            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, .5);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper d-flex w-100">
+        <nav id="sidebar" class="d-flex justify-content-between">
+            <div id="profile-picture-div" class="text-center my-3">
+                <img id="profile-picture" class="" src="./default-avatar.png" alt="Users Profile Picture">
+                <span id="profile-name"></span>
+            </div>
+            <div class="text-center" id="github-icon">
+                <i id="github-icon" class="bi bi-github"></i>
+            </div>
+        </nav>
+
+
+        <div id="content-container" class="w-100">
+            <div class="container">
+                <div id="login" style="display: none;">
+                    <h1>This is an example of the Authorization Code flow</h1>
+                    <a href="http://localhost:3002/login" class="btn btn-primary">Log in with Spotify</a>
+                </div>
+                <div id="loggedin" style="display: none;">
+                    <div id="user-profile">
+                    </div>
+                    <div id="oauth">
+                    </div>
+                    <button class="btn btn-primary" id="obtain-new-token">Obtain new token using the refresh token</button>
+                </div>
+            </div>
+
+            <div id="content" class="container" style="display: none;">
+                <p class="text-center m-3 fs-3">Choose a playlist or create a new one</p>
+                <div id="playlists">
+                    <div id="playlist-template" class="playlist text-center d-none" data-bs-toggle="modal" data-bs-target="#playlist-modal">
+                        <img src="./default-playlist.png" alt="Playlist image" class="playlist-image">
+                        <p class="playlist-title mb-0"></p>
+                        <p class="playlist-track-amount mt-0 mb-3"></p>
+                    </div>
+
+                    <div id="add-playlist-container" class="playlist text-center" data-bs-toggle="modal" data-bs-target="#add-playlist-modal">
+                        <img id="add-playlist" src="./add-playlist.png" alt="Playlist image" class="playlist-image">
+                        <p class="playlist-title mt-3">Add Playlist</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal fade text-center" id="playlist-modal" tabindex="-1" aria-labelledby="playlist-modal-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="btn border-0" style="margin-right: auto; margin-left: 0;"></button>
+                            <h5 class="modal-title text-center" id="playlist-modal-label">Choose an option</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>You can either manage the current songs in your playlist or choose to add new ones from other playlists.</p>
+                            <span class="modal-playlist-id"></span>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-around">
+                            <button id="managa-current" type="button" class="btn btn-primary" data-bs-dismiss="modal">Manage current</button>
+                            <button id="add-new" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add new</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade text-center" id="add-playlist-modal" tabindex="-1" aria-labelledby="add-playlist-modal-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="btn border-0" style="margin-right: auto; margin-left: 0;"></button>
+                        <h5 class="modal-title text-center" id="add-playlist-modal-label">Enter name for new playlist</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="playlist-name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="playlist-name" placeholder="Playlist1">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-around">
+                        <button id="save-new-playlist" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script type="module" src="./main.js"></script>
+</body>
+
+</html>
