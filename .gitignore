@@ -2,3 +2,4 @@
 node_modules
 playlist-tinder
 server/node_modules
+.secret

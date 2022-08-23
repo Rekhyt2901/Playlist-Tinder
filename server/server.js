@@ -2,6 +2,7 @@ const cors = require("cors");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const fetch = require("node-fetch");
+const fs = require("fs");
 
 const host = "localhost";
 const port = 3002;
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 let client_id = 'c38f93c18cd14affa6018a4578cebbb8'; // Your client id
-let client_secret = '897bdd725f614632a47b20f77d973bea'; // Your secret
+let client_secret = fs.readFileSync("../client_secret", "utf-8");
 let redirect_uri = 'http://localhost:3002/callback'; // Your redirect uri
 
 let stateKey = 'spotify_auth_state';
