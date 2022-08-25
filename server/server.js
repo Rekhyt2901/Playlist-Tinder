@@ -44,11 +44,20 @@ app.get('/login', (req, res) => {
     res.cookie(stateKey, state);
 
     // your application requests authorization
-    let scope = 'user-read-private user-read-email';
+    let scopes = [
+        "user-read-private",
+        "user-read-email",
+        "playlist-modify-private",
+        "playlist-modify-public",
+        "playlist-read-private",
+        "playlist-read-collaborative",
+        "user-library-read"
+
+    ];
     res.redirect('https://accounts.spotify.com/authorize?' + new URLSearchParams({
         response_type: 'code',
         client_id: client_id,
-        scope: scope,
+        scope: scopes.join(" "),
         redirect_uri: redirect_uri,
         state: state
     }).toString());
@@ -91,23 +100,16 @@ app.get('/callback', async (req, res) => {
             res.redirect('http://localhost:1234?' + new URLSearchParams({ error: 'invalid_token' }).toString());
         }
         let data = await x.json();
-
         let access_token = data.access_token;
         let refresh_token = data.refresh_token;
-
-        let y = await fetch("https://api.spotify.com/v1/me", {
-            method: "GET",
-            headers: { 'Authorization': 'Bearer ' + access_token },
-
-        });
-        let data2 = await y.json();
-        // console.log("Accestoken:", access_token);
+        let expires_in = data.expires_in;
 
         // we can also pass the token to the browser to make requests from there
         res.redirect('http://localhost:1234?' +
             new URLSearchParams({
                 access_token: access_token,
-                refresh_token: refresh_token
+                refresh_token: refresh_token,
+                expires: (expires_in * 1000) + Date.now()
             }).toString());
     }
 });

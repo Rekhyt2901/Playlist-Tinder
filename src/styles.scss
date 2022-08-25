@@ -10,18 +10,17 @@
     "danger":     #dc3545,
 ); */
 
-/* $theme-colors: (
-    "light":      #e7edf0,
-    "dark":       #2b2b35,
-    "primary":    #1fba93,
-    "secondary":  #005844,
+$theme-colors: (
+    "light":      #ffffff,
+    "dark":       #181818,
+    "primary":    rgb(29, 185, 84),
+    "secondary":  #000000,
     "info":       #00d5ff,
 
-    "success":    #198754,
+    "success":    #00ff00,
     "warning":    #ffc107,
     "danger":     #dc3545,
-); */
-
+);
 @import "/node_modules/bootstrap/scss/bootstrap.scss";
 
 /* 

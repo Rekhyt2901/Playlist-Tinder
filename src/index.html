@@ -16,6 +16,16 @@
             padding: 0;
         }
 
+        .unselectable {
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+            cursor: default;
+        }
+
         #profile-picture {
             width: 3rem;
             height: 3rem;
@@ -24,14 +34,11 @@
 
         #github-icon {
             font-size: 3rem;
-            color: white;
         }
 
         #sidebar {
             min-height: 100vh;
             height: 100vh;
-            background-color: crimson;
-            color: white;
             width: 100px;
             position: fixed;
             top: 0;
@@ -44,10 +51,202 @@
             padding-left: 100px;
         }
 
+
+
+
+
+
+        #playlists {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 0.25fr));
+            gap: 1rem 1rem;
+            justify-content: center;
+        }
+
+        .playlist {
+            min-width: 150px;
+            display: flex;
+            flex-direction: column;
+            transition: margin-top 0.3s;
+        }
+
+        .playlist-image {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            transition: box-shadow 0.2s, all 0.3s;
+        }
+
+
+
+        .playlist:hover {
+            margin-top: 0.3rem;
+            text-decoration: underline;
+        }
+
+        .playlist:hover p:nth-child(2) {
+            margin-top: 0.2rem;
+        }
+
+        .playlist p:nth-child(2) {
+            transition: margin-top 0.3s;
+            margin-top: 0.5rem;
+        }
+
+        .playlist:hover img {
+            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, .5);
+        }
+
+        #alerts-container {
+            position: fixed;
+            top: 1rem;
+            left: 0;
+            text-align: center;
+            z-index: 2000;
+            width: 100%;
+        }
+
+        .alert {
+            position: absolute;
+            transition: top 0.4s, opacity 0.4s;
+            left: 50%;
+            transform: translate(-50%, 0);
+        }
+
+
+
+        html::-webkit-scrollbar {
+            display: none;
+        }
+
+        #choose-playlists:last-child {
+            margin-bottom: 1rem;
+        }
+
+        #choose-playlists,
+        #manage-current-playlist, #add-new-playlist {
+            min-width: 150px;
+            display: flex;
+            flex-direction: column;
+            transition: margin-top 0.3s;
+        }
+
+
+
+
+
+
+
+
+        .tinder {
+            width: 100%;
+            /* min-height: 90vh; */
+            /* overflow: hidden; */
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.1s ease-in-out;
+            margin: 5vh auto;
+        }
+
+        .loaded.tinder {
+            opacity: 1;
+        }
+
+        .tinder--cards {
+            padding-top: 5rem;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 1;
+        }
+
+        .tinder--card {
+            display: inline-block;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: absolute;
+            will-change: transform;
+            transition: all 0.3s ease-in-out;
+            cursor: -webkit-grab;
+            cursor: -moz-grab;
+            cursor: grab;
+        }
+
+        .moving.tinder--card {
+            transition: none;
+            cursor: -webkit-grabbing;
+            cursor: -moz-grabbing;
+            cursor: grabbing;
+        }
+
+        .tinder--card img {
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .tinder--card h3 {
+            margin-top: 1rem;
+            pointer-events: none;
+        }
+
+        .tinder--card p {
+            margin-top: 1rem;
+            pointer-events: none;
+        }
+
+        .tinder--buttons {
+            text-align: center;
+            width: calc(100vw - 100px);
+            left: 100px;
+            z-index: 900;
+            position: fixed;
+            right: 0;
+        }
+
+        .tinder--buttons button {
+            border-radius: 100%;
+            border: 0;
+            line-height: 3rem;
+            width: 3rem;
+            display: inline-block;
+            margin: 0 0.5rem;
+        }
+
+        #manage-current-playlist-container, #add-new-playlist-container {
+            position: absolute;
+            z-index: 2000;
+            top: 0;
+            left: 116px;
+            margin-top: 1rem;
+        }
+
+        #manage-current-playlist, #add-new-playlist {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #logout-container {
+            margin-bottom: auto;
+        }
+
+        #choose-playlists-container .form-check {
+            font-size: large;
+        }
+
+
+
         @media only screen and (max-width: 576px) {
             #sidebar {
                 min-height: unset;
-                height: 50px;
+                max-height: 50px;
                 width: 100vw;
                 min-width: 100vw;
                 top: unset;
@@ -71,84 +270,92 @@
 
             #github-icon {
                 font-size: 2rem;
-                color: white;
             }
-        }
+
+            .alert {
+                width: 90%;
+            }
 
 
 
+            .tinder--buttons {
+                width: 100vw;
+                left: 0;
+            }
 
-        #playlists {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 0.5rem;
-        }
+            #manage-current-playlist-container, #add-new-playlist-container {
+                position: static;
+                margin-top: 1rem;
+            }
 
-        .playlist {
-            min-width: 140px;
-            display: flex;
-            flex-direction: column;
-            transition: margin-top 0.3s;
-        }
+            #manage-current-tinder-container, #add-new-tinder-container {
+                margin: 0;
+                margin-bottom: 1rem;
+                z-index: -1;
+            }
 
-        .playlist-image {
-            width: 100%;
-            height: auto;
-            transition: box-shadow 0.2s, all 0.3s;
-        }
+            #logout-container {
+                margin-left: auto;
+                margin-right: 1rem;
+                margin-bottom: 0;
+                margin-top: 0;
+            }
 
-
-
-        .playlist:hover {
-            margin-top: 0.3rem;
-            text-decoration: underline;
-        }
-
-        .playlist:hover p:nth-child(2) {
-            margin-top: 0.2rem;
-        }
-
-        .playlist p:nth-child(2) {
-            transition: margin-top 0.3s;
-            margin-top: 0.5rem;
-        }
-
-        .playlist:hover img {
-            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, .5);
+            #choose-playlists-container .form-check {
+                padding: 0;
+                font-size: medium;
+            }
         }
     </style>
 </head>
 
-<body>
+<body class="bg-dark text-light">
     <div class="wrapper d-flex w-100">
-        <nav id="sidebar" class="d-flex justify-content-between">
+
+        <!-- Sidebar -->
+        <nav id="sidebar" class="d-flex justify-content-between bg-secondary text-light">
             <div id="profile-picture-div" class="text-center my-3">
-                <img id="profile-picture" class="" src="./default-avatar.png" alt="Users Profile Picture">
+                <img id="profile-picture" class="" src="./default-avatar.png" style="display: none;" alt="Users Profile Picture">
                 <span id="profile-name"></span>
+            </div>
+            <div id="logout-container" class="text-center">
+                <button id="logout" class="btn btn-outline-light rounded-5" style="display: none;"><a class="link-light text-decoration-none" href="/">Log Out</a></button>
             </div>
             <div class="text-center" id="github-icon">
                 <i id="github-icon" class="bi bi-github"></i>
             </div>
         </nav>
 
+        <!-- Alerts -->
+        <div id="alerts-container">
+            <div id="alert-template" class="alert alert-dismissible fade show" role="alert" style="display: none; top: -100px;">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span class="alert-message"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
 
+
+        <!-- Content to the right of sidebar -->
         <div id="content-container" class="w-100">
-            <div class="container">
-                <div id="login" style="display: none;">
-                    <h1>This is an example of the Authorization Code flow</h1>
-                    <a href="http://localhost:3002/login" class="btn btn-primary">Log in with Spotify</a>
-                </div>
-                <div id="loggedin" style="display: none;">
-                    <div id="user-profile">
-                    </div>
-                    <div id="oauth">
-                    </div>
-                    <button class="btn btn-primary" id="obtain-new-token">Obtain new token using the refresh token</button>
-                </div>
+
+            <!-- Log In and Logged In -->
+            <div id="login" class="container text-center flex-column w-75" style="display: none; height: 80vh;">
+                <p class="mt-auto mb-4 fs-1 fw-bold">Spotify Playlist Tinder</p>
+                <a href="http://localhost:3002/login" class="btn btn-primary fs-3 fw-bold text-light mb-auto rounded-5">Log in with Spotify</a>
             </div>
 
+            <!-- Loading -->
+            <div id="loading" class="justify-content-center align-items-center" style="height: 100vh; display: flex;">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h3 class="mx-3 mb-0">Loading...</h3>
+            </div>
+
+            <!-- Playlist Menu -->
             <div id="content" class="container" style="display: none;">
-                <p class="text-center m-3 fs-3">Choose a playlist or create a new one</p>
+                <p class="text-left my-5 fs-3 fw-bold">Choose a playlist or create a new one</p>
                 <div id="playlists">
                     <div id="playlist-template" class="playlist text-center d-none" data-bs-toggle="modal" data-bs-target="#playlist-modal">
                         <img src="./default-playlist.png" alt="Playlist image" class="playlist-image">
@@ -156,54 +363,140 @@
                         <p class="playlist-track-amount mt-0 mb-3"></p>
                     </div>
 
-                    <div id="add-playlist-container" class="playlist text-center" data-bs-toggle="modal" data-bs-target="#add-playlist-modal">
+                    <div id="add-playlist-container" class="playlist text-center d-none" data-bs-toggle="modal" data-bs-target="#add-playlist-modal">
                         <img id="add-playlist" src="./add-playlist.png" alt="Playlist image" class="playlist-image">
                         <p class="playlist-title mt-3">Add Playlist</p>
                     </div>
                 </div>
             </div>
 
+            <!-- Manage Current Songs -->
+            <div id="manage-current-tinder" class="container text-center" style="display: none;">
+                <div id="manage-current-playlist-container">
+                    <div id="manage-current-playlist" style="width: 10rem;">
+                        <img src="./default-playlist.png" alt="Playlist image" class="playlist-image">
+                        <h3 id="manage-current-playlist-title" class="playlist-title mb-0 mt-3"></h3>
+                        <p id="manage-current-playlist-tracks" class="playlist-track-amount mt-0 mb-3"></p>
+                    </div>
+                </div>
 
-            <div class="modal fade text-center" id="playlist-modal" tabindex="-1" aria-labelledby="playlist-modal-label" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button class="btn border-0" style="margin-right: auto; margin-left: 0;"></button>
-                            <h5 class="modal-title text-center" id="playlist-modal-label">Choose an option</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                <!-- Tinder -->
+                <div id="manage-current-tinder-container" class="tinder">
+                    <div id="tinder-cards-container" class="tinder--cards">
+                        <div id="tinder-card-template" class="tinder--card bg-secondary" style="display: none;">
+                            <img class="tinder-card-image" alt="Track Image" src="./default-song.jpg">
+                            <h3 class="tinder-card-title text-light"></h3>
+                            <p class="tinder-card-artists text-light"></p>
                         </div>
-                        <div class="modal-body">
-                            <p>You can either manage the current songs in your playlist or choose to add new ones from other playlists.</p>
-                            <span class="modal-playlist-id"></span>
+                    </div>
+
+                    <div id="tinder--buttons" class="tinder--buttons">
+                        <button id="nope" class="bg-danger"><i class="bi bi-trash3-fill text-light"></i></button>
+                        <button id="love" class="bg-primary"><i class="bi bi-heart-fill text-light"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Choose Playlist for adding songs -->
+            <div id="choose-playlists" class="container text-center" style="display: none;">
+                <div id="chosen-playlist" class="mx-auto mt-3" style="width: 10rem;">
+                    <img src="./default-playlist.png" alt="Playlist image" class="playlist-image">
+                    <h3 class="playlist-title mb-0"></h3>
+                    <p class="playlist-track-amount mt-0 mb-3"></p>
+                </div>
+                <h3 class="mb-5">Select playlists from which you want to add songs</h3>
+
+                <div id="choose-playlists-container">
+                    <div id="choose-playlist-template" class="form-check w-75 mx-auto d-flex">
+                        <input class="form-check-input" style="margin-right: 1rem; margin-left: 0.5rem;" type="checkbox" value="">
+                        <label class="form-check-label text-left unselectable">
+                            Saved Songs
+                        </label>
+                        <span class="choose-playlist-track-amount text-right unselectable" style="margin-left: auto;"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-5">
+                    <button id="cancel-choose-playlists" class="btn btn-danger text-light w-25 mx-3">Cancel</button>
+                    <button id="next-choose-playlists" class="btn btn-primary text-light w-25 mx-3">Next</button>
+                </div>
+            </div>
+
+            <!-- Add new Songs Tinder -->
+            <div id="add-new-tinder" class="container text-center" style="display: none;">
+                <div id="add-new-playlist-container">
+                    <div id="add-new-playlist" style="width: 10rem;">
+                        <img src="./default-playlist.png" alt="Playlist image" class="playlist-image">
+                        <h3 id="add-new-playlist-title" class="playlist-title mb-0 mt-3"></h3>
+                        <p id="add-new-playlist-tracks" class="playlist-track-amount mt-0 mb-3"></p>
+                    </div>
+                </div>
+
+
+                <!-- Tinder -->
+                <div id="add-new-tinder-container" class="tinder">
+                    <div id="add-new-tinder-cards-container" class="tinder--cards">
+                        <div id="add-new-tinder-card-template" class="tinder--card bg-secondary" style="display: none;">
+                            <img class="tinder-card-image" alt="Track Image" src="./default-song.jpg">
+                            <h3 class="tinder-card-title text-light"></h3>
+                            <p class="tinder-card-artists text-light"></p>
                         </div>
-                        <div class="modal-footer d-flex justify-content-around">
-                            <button id="managa-current" type="button" class="btn btn-primary" data-bs-dismiss="modal">Manage current</button>
-                            <button id="add-new" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add new</button>
-                        </div>
+                    </div>
+
+                    <div id="add-new-tinder--buttons" class="tinder--buttons">
+                        <button id="add-new-nope" class="bg-danger"><i class="bi bi-trash3-fill text-light"></i></button>
+                        <button id="add-new-love" class="bg-primary"><i class="bi bi-heart-fill text-light"></i></button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="modal fade text-center" id="add-playlist-modal" tabindex="-1" aria-labelledby="add-playlist-modal-label" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
+
+
+
+
+        <!-- Normal Playlist Modal -->
+        <div class="modal fade text-center text-light" id="playlist-modal" tabindex="-1" aria-labelledby="playlist-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <button class="btn border-0" style="margin-right: auto; margin-left: 0;"></button>
+                        <h5 class="modal-title text-center" id="playlist-modal-label">Choose an option</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>You can either manage the current songs in your playlist or choose to add new ones from other playlists.</p>
+                        <span class="modal-playlist-id"></span>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-around">
+                        <button id="manage-current" type="button" class="btn btn-primary text-light" data-bs-dismiss="modal">Manage current songs</button>
+                        <button id="add-new" type="button" class="btn btn-primary text-light" data-bs-dismiss="modal">Add new ones</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Playlist Modal -->
+        <div class="modal fade text-center text-light" id="add-playlist-modal" tabindex="-1" aria-labelledby="add-playlist-modal-label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark">
                     <div class="modal-header">
                         <button class="btn border-0" style="margin-right: auto; margin-left: 0;"></button>
                         <h5 class="modal-title text-center" id="add-playlist-modal-label">Enter name for new playlist</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form>
                             <div class="mb-3">
                                 <label for="playlist-name" class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" id="playlist-name" placeholder="Playlist1">
+                                <input type="text" class="form-control" id="playlist-name" placeholder="...">
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer d-flex justify-content-around">
-                        <button id="save-new-playlist" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="save-new-playlist" type="button" class="btn btn-primary text-light">Save</button>
+                        <button type="button" class="btn btn-danger text-light" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -211,7 +504,7 @@
     </div>
     </div>
 
-
+    <script src="./Hammer.js"></script>
     <script type="module" src="./main.js"></script>
 </body>
 
