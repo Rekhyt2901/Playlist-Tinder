@@ -61,7 +61,7 @@ async function main() {
 
     let profile = await APIGet("me");
 
-    document.getElementById("profile-picture").setAttribute("src", profile.images[0] ? profile.images[0].url : "./default-avatar.png");
+    document.getElementById("profile-picture").setAttribute("src", profile.images[0] ? profile.images[0].url : "./images/default-avatar.png");
     document.getElementById("profile-picture").style.display = "";
     document.getElementById("profile-name").textContent = profile.display_name;
     userId = profile.id;
