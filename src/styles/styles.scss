@@ -1,0 +1,34 @@
+$theme-colors: (
+    'light': #ffffff,
+    'dark': #181818,
+    'primary': rgb(29, 185, 84),
+    'secondary': #000000,
+    'info': #00d5ff,
+
+    'success': #00ff00,
+    'warning': #ffc107,
+    'danger': #dc3545,
+);
+
+$alight: map-get($map: $theme-colors, $key: 'light',);
+$adark: map-get($map: $theme-colors, $key: 'dark',);
+$aprimary: map-get($map: $theme-colors, $key: 'primary',);
+$asecondary: map-get($map: $theme-colors, $key: 'secondary',);
+$ainfo: map-get($map: $theme-colors, $key: 'info',);
+$asuccess: map-get($map: $theme-colors, $key: 'success',);
+$awarning: map-get($map: $theme-colors, $key: 'warning',);
+$adanger: map-get($map: $theme-colors, $key: 'danger',);
+
+@import "./other.scss";
+@import "./playlists.scss";
+@import "./choose-playlists.scss";
+@import "./upper-playlist.scss";
+@import "./tinder.scss";
+
+@import "./mediaqueries1.scss";
+@import "./mediaqueries2.scss";
+
+
+
+
+@import "/node_modules/bootstrap/scss/bootstrap.scss";

@@ -1,0 +1,113 @@
+@media only screen and (max-width: 950px) {
+    #manage-current-playlist,
+    #add-new-playlist {
+        width: 150px;
+    }
+}
+
+@media only screen and (max-width: 850px) {
+    .tinder--card {
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 660px) {
+    #sidebar {
+        min-height: unset;
+        max-height: 50px;
+        width: 100vw;
+        min-width: 100vw;
+        top: unset;
+        bottom: 0;
+        left: 0;
+        flex-direction: row;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .wrapper {
+        padding-bottom: 50px;
+        padding-left: 0;
+    }
+
+    #profile-picture {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 100%;
+    }
+
+    #github-icon {
+        font-size: 2rem;
+    }
+
+    .alert {
+        width: 90%;
+    }
+
+    .playlist-title {
+        margin: 0.5rem;
+    }
+
+    #logout-container {
+        margin-left: auto;
+        margin-right: 1rem;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+
+    #choose-playlists-container .form-check {
+        padding: 0;
+        font-size: medium;
+    }
+
+
+
+
+
+    .tinder--cards {
+        padding-top: 4rem;
+    }
+
+    .tinder--card {
+        width: 70%;
+    }
+
+    .tinder--buttons {
+        width: 100vw;
+        margin-top: calc((100vh - 10rem));
+    }
+    
+    .tinder-save-cancel-buttons button {
+        padding: 2px 5%;
+        border-radius: 8px;
+    }
+
+    #manage-current-playlist-container,
+    #add-new-playlist-container {
+        left: 16px;
+    }
+
+    #manage-current-playlist,
+    #add-new-playlist {
+        width: 100px;
+    }
+
+
+
+    .tinder--card h4 {
+        margin-top: 1rem;
+        pointer-events: none;
+        font-size: 1rem;
+    }
+
+    .tinder--card p {
+        margin-top: 0.5rem;
+        pointer-events: none;
+        font-size: 0.9rem;
+    }
+
+    .play-preview {
+        font-size: 2rem;
+        transition: all 0.3s;
+    }
+}

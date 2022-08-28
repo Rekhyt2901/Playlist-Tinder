@@ -3,309 +3,14 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <title>Playlist Tinder</title>
 
-    <link rel="stylesheet" href="./styles.scss">
+    <link rel="stylesheet" href="./styles/styles.scss">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
     <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        .unselectable {
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -o-user-select: none;
-            user-select: none;
-            cursor: default;
-        }
-
-        #profile-picture {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 100%;
-        }
-
-        #github-icon {
-            font-size: 3rem;
-        }
-
-        #sidebar {
-            min-height: 100vh;
-            height: 100vh;
-            width: 100px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 98;
-            flex-direction: column;
-        }
-
-        .wrapper {
-            padding-left: 100px;
-        }
-
-
-
-
-
-
-        #playlists {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 0.25fr));
-            gap: 1rem 1rem;
-            justify-content: center;
-        }
-
-        .playlist {
-            min-width: 150px;
-            display: flex;
-            flex-direction: column;
-            transition: margin-top 0.3s;
-        }
-
-        .playlist-image {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 1 / 1;
-            transition: box-shadow 0.2s, all 0.3s;
-        }
-
-
-
-        .playlist:hover {
-            margin-top: 0.3rem;
-            text-decoration: underline;
-        }
-
-        .playlist:hover p:nth-child(2) {
-            margin-top: 0.2rem;
-        }
-
-        .playlist p:nth-child(2) {
-            transition: margin-top 0.3s;
-            margin-top: 0.5rem;
-        }
-
-        .playlist:hover img {
-            box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, .5);
-        }
-
-        #alerts-container {
-            position: fixed;
-            top: 1rem;
-            left: 0;
-            text-align: center;
-            z-index: 2000;
-            width: 100%;
-        }
-
-        .alert {
-            position: absolute;
-            transition: top 0.4s, opacity 0.4s;
-            left: 50%;
-            transform: translate(-50%, 0);
-        }
-
-
-
-        html::-webkit-scrollbar {
-            display: none;
-        }
-
-        #choose-playlists:last-child {
-            margin-bottom: 1rem;
-        }
-
-        #choose-playlists,
-        #manage-current-playlist, #add-new-playlist {
-            min-width: 150px;
-            display: flex;
-            flex-direction: column;
-            transition: margin-top 0.3s;
-        }
-
-
-
-
-
-
-
-
-        .tinder {
-            width: 100%;
-            /* min-height: 90vh; */
-            /* overflow: hidden; */
-            display: flex;
-            flex-direction: column;
-            justify-content: start;
-            position: relative;
-            opacity: 0;
-            transition: opacity 0.1s ease-in-out;
-            margin: 5vh auto;
-        }
-
-        .loaded.tinder {
-            opacity: 1;
-        }
-
-        .tinder--cards {
-            padding-top: 5rem;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            z-index: 1;
-        }
-
-        .tinder--card {
-            display: inline-block;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 8px;
-            overflow: hidden;
-            position: absolute;
-            will-change: transform;
-            transition: all 0.3s ease-in-out;
-            cursor: -webkit-grab;
-            cursor: -moz-grab;
-            cursor: grab;
-        }
-
-        .moving.tinder--card {
-            transition: none;
-            cursor: -webkit-grabbing;
-            cursor: -moz-grabbing;
-            cursor: grabbing;
-        }
-
-        .tinder--card img {
-            width: 100%;
-            height: auto;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .tinder--card h3 {
-            margin-top: 1rem;
-            pointer-events: none;
-        }
-
-        .tinder--card p {
-            margin-top: 1rem;
-            pointer-events: none;
-        }
-
-        .tinder--buttons {
-            text-align: center;
-            width: calc(100vw - 100px);
-            left: 100px;
-            z-index: 900;
-            position: fixed;
-            right: 0;
-        }
-
-        .tinder--buttons button {
-            border-radius: 100%;
-            border: 0;
-            line-height: 3rem;
-            width: 3rem;
-            display: inline-block;
-            margin: 0 0.5rem;
-        }
-
-        #manage-current-playlist-container, #add-new-playlist-container {
-            position: absolute;
-            z-index: 2000;
-            top: 0;
-            left: 116px;
-            margin-top: 1rem;
-        }
-
-        #manage-current-playlist, #add-new-playlist {
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        #logout-container {
-            margin-bottom: auto;
-        }
-
-        #choose-playlists-container .form-check {
-            font-size: large;
-        }
-
-
-
-        @media only screen and (max-width: 576px) {
-            #sidebar {
-                min-height: unset;
-                max-height: 50px;
-                width: 100vw;
-                min-width: 100vw;
-                top: unset;
-                bottom: 0;
-                left: 0;
-                flex-direction: row;
-                align-items: center;
-                padding: 1rem;
-            }
-
-            .wrapper {
-                padding-bottom: 50px;
-                padding-left: 0;
-            }
-
-            #profile-picture {
-                width: 2rem;
-                height: 2rem;
-                border-radius: 100%;
-            }
-
-            #github-icon {
-                font-size: 2rem;
-            }
-
-            .alert {
-                width: 90%;
-            }
-
-
-
-            .tinder--buttons {
-                width: 100vw;
-                left: 0;
-            }
-
-            #manage-current-playlist-container, #add-new-playlist-container {
-                position: static;
-                margin-top: 1rem;
-            }
-
-            #manage-current-tinder-container, #add-new-tinder-container {
-                margin: 0;
-                margin-bottom: 1rem;
-                z-index: -1;
-            }
-
-            #logout-container {
-                margin-left: auto;
-                margin-right: 1rem;
-                margin-bottom: 0;
-                margin-top: 0;
-            }
-
-            #choose-playlists-container .form-check {
-                padding: 0;
-                font-size: medium;
-            }
-        }
+        
     </style>
 </head>
 
@@ -319,10 +24,12 @@
                 <span id="profile-name"></span>
             </div>
             <div id="logout-container" class="text-center">
-                <button id="logout" class="btn btn-outline-light rounded-5" style="display: none;"><a class="link-light text-decoration-none" href="/">Log Out</a></button>
+                <button id="logout" class="btn btn-outline-primary rounded-5" style="display: none;"><a class="link-light text-decoration-none" href="/">Log Out</a></button>
             </div>
-            <div class="text-center" id="github-icon">
-                <i id="github-icon" class="bi bi-github"></i>
+            <div class="text-center" id="github-icon-container">
+                <a class="text-light" href="https://github.com/Rekhyt2901/Playlist-Tinder" target="_blank" rel="noreferrer noopener">
+                    <i id="github-icon" class="bi bi-github"></i>
+                </a>
             </div>
         </nav>
 
@@ -342,7 +49,8 @@
             <!-- Log In and Logged In -->
             <div id="login" class="container text-center flex-column w-75" style="display: none; height: 80vh;">
                 <p class="mt-auto mb-4 fs-1 fw-bold">Spotify Playlist Tinder</p>
-                <a href="http://localhost:3002/login" class="btn btn-primary fs-3 fw-bold text-light mb-auto rounded-5">Log in with Spotify</a>
+                <a href="https://spotify-tinder.alexkleyn.de:3002/login" class="btn btn-primary fs-3 fw-bold text-light mb-auto rounded-5">Log in with Spotify</a>
+                <!-- <a href="http://localhost:3002/login" class="btn btn-primary fs-3 fw-bold text-light mb-auto rounded-5">Log in with Spotify</a> -->
             </div>
 
             <!-- Loading -->
@@ -355,7 +63,7 @@
 
             <!-- Playlist Menu -->
             <div id="content" class="container" style="display: none;">
-                <p class="text-left my-5 fs-3 fw-bold">Choose a playlist or create a new one</p>
+                <p id="choose-playlist-header" class="text-start my-4 fw-bold">Choose a playlist or create a new one</p>
                 <div id="playlists">
                     <div id="playlist-template" class="playlist text-center d-none" data-bs-toggle="modal" data-bs-target="#playlist-modal">
                         <img src="./images/default-playlist.png" alt="Playlist image" class="playlist-image">
@@ -371,36 +79,47 @@
             </div>
 
             <!-- Manage Current Songs -->
-            <div id="manage-current-tinder" class="container text-center" style="display: none;">
+            <div id="manage-current-tinder" class="text-center" style="display: none;">
+                <!-- Playlist at top -->
                 <div id="manage-current-playlist-container">
-                    <div id="manage-current-playlist" style="width: 10rem;">
-                        <img src="./images/default-playlist.png" alt="Playlist image" class="playlist-image">
-                        <h3 id="manage-current-playlist-title" class="playlist-title mb-0 mt-3"></h3>
-                        <p id="manage-current-playlist-tracks" class="playlist-track-amount mt-0 mb-3"></p>
+                    <div id="manage-current-playlist">
+                        <div class="d-flex flex-column justify-content-around w-100">
+                            <div>
+                                <img src="./images/default-playlist.png" alt="Playlist image" class="playlist-image">
+                                <h3 id="manage-current-playlist-title" class="playlist-title mb-0"></h3>
+                                <p id="manage-current-playlist-tracks" class="playlist-track-amount mt-0 mb-0"></p>
+                            </div>
+
+                            <div class="tinder-save-cancel-buttons d-flex flex-row justify-content-center">
+                                <button id="manage-current-cancel" class="btn btn-danger text-light mx-1">Cancel</button>
+                                <button id="manage-current-save" class="btn btn-primary text-light mx-1">Save</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
 
                 <!-- Tinder -->
                 <div id="manage-current-tinder-container" class="tinder">
                     <div id="tinder-cards-container" class="tinder--cards">
                         <div id="tinder-card-template" class="tinder--card bg-secondary" style="display: none;">
                             <img class="tinder-card-image" alt="Track Image" src="./images/default-song.jpg">
-                            <h3 class="tinder-card-title text-light"></h3>
+                            <span class="play-preview"><i class="bi bi-play-circle-fill text-light"></i></span>
+                            <h4 class="tinder-card-title text-light"></h4>
                             <p class="tinder-card-artists text-light"></p>
                         </div>
                     </div>
-
-                    <div id="tinder--buttons" class="tinder--buttons">
-                        <button id="nope" class="bg-danger"><i class="bi bi-trash3-fill text-light"></i></button>
-                        <button id="love" class="bg-primary"><i class="bi bi-heart-fill text-light"></i></button>
-                    </div>
+                </div>
+                
+                <!-- Tinder Buttons -->
+                <div id="tinder--buttons" class="tinder--buttons">
+                    <button id="nope" class="bg-danger"><i class="bi bi-trash3-fill text-light"></i></button>
+                    <button id="love" class="bg-primary"><i class="bi bi-heart-fill text-light"></i></button>
                 </div>
             </div>
 
             <!-- Choose Playlist for adding songs -->
             <div id="choose-playlists" class="container text-center" style="display: none;">
-                <div id="chosen-playlist" class="mx-auto mt-3" style="width: 10rem;">
+                <div id="chosen-playlist" class="mx-auto mt-3">
                     <img src="./images/default-playlist.png" alt="Playlist image" class="playlist-image">
                     <h3 class="playlist-title mb-0"></h3>
                     <p class="playlist-track-amount mt-0 mb-3"></p>
@@ -410,14 +129,14 @@
                 <div id="choose-playlists-container">
                     <div id="choose-playlist-template" class="form-check w-75 mx-auto d-flex">
                         <input class="form-check-input" style="margin-right: 1rem; margin-left: 0.5rem;" type="checkbox" value="">
-                        <label class="form-check-label text-left unselectable">
+                        <label class="form-check-label text-start unselectable">
                             Saved Songs
                         </label>
-                        <span class="choose-playlist-track-amount text-right unselectable" style="margin-left: auto;"></span>
+                        <span class="choose-playlist-track-amount  unselectable" style="margin-left: auto;"></span>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-center mt-5">
+                <div class="d-flex justify-content-center mt-5 mb-3">
                     <button id="cancel-choose-playlists" class="btn btn-danger text-light w-25 mx-3">Cancel</button>
                     <button id="next-choose-playlists" class="btn btn-primary text-light w-25 mx-3">Next</button>
                 </div>
@@ -426,20 +145,28 @@
             <!-- Add new Songs Tinder -->
             <div id="add-new-tinder" class="container text-center" style="display: none;">
                 <div id="add-new-playlist-container">
-                    <div id="add-new-playlist" style="width: 10rem;">
-                        <img src="./images/default-playlist.png" alt="Playlist image" class="playlist-image">
-                        <h3 id="add-new-playlist-title" class="playlist-title mb-0 mt-3"></h3>
-                        <p id="add-new-playlist-tracks" class="playlist-track-amount mt-0 mb-3"></p>
+                    <div id="add-new-playlist">
+                        <div class="d-flex flex-column justify-content-around w-100">
+                            <div>
+                                <img src="./images/default-playlist.png" alt="Playlist image" class="playlist-image">
+                                <h3 id="add-new-playlist-title" class="playlist-title mb-0"></h3>
+                                <p id="add-new-playlist-tracks" class="playlist-track-amount mt-0 mb-0"></p>
+                            </div>
+                            <div class="tinder-save-cancel-buttons d-flex flex-row justify-content-center">
+                                <button id="add-new-cancel" class="btn btn-danger text-light mx-1">Cancel</button>
+                                <button id="add-new-save" class="btn btn-primary text-light mx-1">Save</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-
+                
                 <!-- Tinder -->
                 <div id="add-new-tinder-container" class="tinder">
                     <div id="add-new-tinder-cards-container" class="tinder--cards">
                         <div id="add-new-tinder-card-template" class="tinder--card bg-secondary" style="display: none;">
                             <img class="tinder-card-image" alt="Track Image" src="./images/default-song.jpg">
-                            <h3 class="tinder-card-title text-light"></h3>
+                            <span class="play-preview"><i class="bi bi-play-circle-fill text-light"></i></span>
+                            <h4 class="tinder-card-title text-light"></h4>
                             <p class="tinder-card-artists text-light"></p>
                         </div>
                     </div>
@@ -504,8 +231,8 @@
     </div>
     </div>
 
-    <script src="./Hammer.js"></script>
-    <script type="module" src="./main.js"></script>
+    <script src="./js/Hammer.js"></script>
+    <script type="module" src="./js/main.js"></script>
 </body>
 
 </html>

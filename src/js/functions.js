@@ -96,11 +96,20 @@ async function loadPlaylists() {
     }
 }
 
+function stopAllAudio() {
+    let allAudios = document.querySelectorAll('audio');
+    allAudios.forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+}
+
 
 
 module.exports = {
     APIGet,
     APIPost,
     createAlert,
-    loadPlaylists
+    loadPlaylists,
+    stopAllAudio
 };

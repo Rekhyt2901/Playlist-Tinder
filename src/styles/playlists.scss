@@ -1,0 +1,42 @@
+#playlists {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 0.25fr));
+    gap: 1rem 1rem;
+    justify-content: center;
+}
+
+.playlist {
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    transition: margin-top 0.3s;
+}
+
+.playlist title {
+    margin-top: 1rem;
+}
+
+.playlist-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    transition: box-shadow 0.2s, all 0.3s;
+}
+
+.playlist:hover {
+    margin-top: 0.3rem;
+    text-decoration: underline;
+}
+
+.playlist:hover p:nth-child(2) {
+    margin-top: 0.2rem;
+}
+
+.playlist p:nth-child(2) {
+    transition: margin-top 0.3s;
+    margin-top: 0.5rem;
+}
+
+.playlist:hover img {
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.5);
+}

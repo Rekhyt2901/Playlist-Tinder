@@ -21,7 +21,7 @@ window.onload = init;
 
 async function init() {
     async function obtainNewToken() {
-        let x = await fetch(`http://localhost:3002/refresh_token?refresh_token=${refresh_token}`);
+        let x = await fetch(`https://spotify-tinder.alexkleyn.de:3002/refresh_token?refresh_token=${refresh_token}`);
         let data = await x.json();
         access_token = data.access_token;
         let expires = Date.now() + 3600000;

@@ -1,17 +1,23 @@
 const cors = require("cors");
 const express = require("express");
+const https = require("https");
 const cookieParser = require("cookie-parser");
 const fetch = require("node-fetch");
 const fs = require("fs");
 
-const host = "localhost";
+const host = "spotify-tinder.alexkleyn.de";
+// const host = "127.0.0.1";
 const port = 3002;
+const domain = "https://spotify-tinder.alexkleyn.de";
+// const domain = "http://localhost";
+const clientPort = 443;
+// const clientPort = 1234;
 
 let app = express();
 
 
 let corsOptions = {
-    origin: 'http://localhost:1234',
+    origin: `${domain}:${clientPort}`,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 // let static = __dirname + "/../playlist-tinder";
@@ -23,8 +29,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 let client_id = 'c38f93c18cd14affa6018a4578cebbb8'; // Your client id
-let client_secret = fs.readFileSync("../client_secret", "utf-8");
-let redirect_uri = 'http://localhost:3002/callback'; // Your redirect uri
+let client_secret = fs.readFileSync("./client_secret", "utf-8");
+let redirect_uri = `${domain}:${port}/callback`; // Your redirect uri
 
 let stateKey = 'spotify_auth_state';
 
@@ -73,7 +79,7 @@ app.get('/callback', async (req, res) => {
     let storedState = req.cookies ? req.cookies[stateKey] : null;
 
     if (state === null || state !== storedState) {
-        res.redirect('http://localhost:1234?' +
+        res.redirect(`${domain}:${clientPort}?` +
             new URLSearchParams({
                 error: 'state_mismatch'
             }).toString());
@@ -97,7 +103,7 @@ app.get('/callback', async (req, res) => {
             console.log("Error!");
             console.log(x.ok);
 
-            res.redirect('http://localhost:1234?' + new URLSearchParams({ error: 'invalid_token' }).toString());
+            res.redirect(`${domain}:${clientPort}?` + new URLSearchParams({ error: 'invalid_token' }).toString());
         }
         let data = await x.json();
         let access_token = data.access_token;
@@ -105,7 +111,7 @@ app.get('/callback', async (req, res) => {
         let expires_in = data.expires_in;
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect('http://localhost:1234?' +
+        res.redirect(`${domain}:${clientPort}?` +
             new URLSearchParams({
                 access_token: access_token,
                 refresh_token: refresh_token,
@@ -144,6 +150,13 @@ app.get('/refresh_token', async (req, res) => {
     }
 });
 
-app.listen(port, host, () => {
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/alexkleyn.de/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/alexkleyn.de/fullchain.pem')
+};
+https.createServer(options, app).listen(port, host, () => {
     console.log(`Listening on Port ${port}!`);
 });
+// app.listen(port, host, () => {    
+    // console.log(`Listening on Port ${port}!`);
+// });
