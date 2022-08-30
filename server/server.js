@@ -17,7 +17,7 @@ let app = express();
 
 
 let corsOptions = {
-    origin: `${domain}:${clientPort}`,
+    origin: `${domain}`,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 // let static = __dirname + "/../playlist-tinder";

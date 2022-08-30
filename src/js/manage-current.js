@@ -52,8 +52,6 @@ async function manageCurrent() {
         return;
     }
 
-    // show track progress in corner
-    document.getElementById("manage-current-playlist-tracks").textContent = document.querySelectorAll('#tinder-cards-container .tinder--card.removed').length + 1 + " / " + tracks.length;
 
     for (let track of tracks) {
         let node = document.getElementById("tinder-card-template").cloneNode(true);
@@ -61,7 +59,10 @@ async function manageCurrent() {
         node.setAttribute("id", "");
 
         if (!track.track) continue;
-        if (track.track.album.images.length > 0) node.querySelector(".tinder-card-image").setAttribute("src", track.track.album.images[0].url);
+
+        // if (track.track.album.images.length > 0) node.querySelector(".tinder-card-image").setAttribute("src", track.track.album.images[0].url);
+        if (track.track.album.images.length > 0) node.querySelector(".tinder-card-image").setAttribute("srcData", track.track.album.images[0].url);
+
         node.querySelector(".tinder-card-title").textContent = track.track.name;
 
         let artists = track.track.artists.reduce((a, c) => a + c.name + ", ", "");
@@ -82,9 +83,11 @@ async function manageCurrent() {
             new Tooltip(icon);
         } else {
             // create audio element
-            let newAudio = document.createElement("audio");
-            newAudio.setAttribute("src", songPreview);
-            node.appendChild(newAudio);
+            node.setAttribute("audioPreviewSrc", songPreview);
+
+            // let newAudio = document.createElement("audio");
+            // newAudio.setAttribute("src", songPreview);
+            // node.appendChild(newAudio);
         }
 
         node.querySelector(".play-preview").onclick = () => {
@@ -109,9 +112,12 @@ async function manageCurrent() {
         document.getElementById("tinder-cards-container").append(node);
     }
 
+    // show track progress in corner
+    updateProgress();
+
     // TINDER //
     let allCards = document.querySelectorAll('#tinder-cards-container .tinder--card');
-    
+
     function initCards() {
         let newCards = document.querySelectorAll('#tinder-cards-container .tinder--card:not(.removed)');
 
@@ -122,13 +128,26 @@ async function manageCurrent() {
 
             card.style.transform = 'scale(' + scale + ')';
 
-            let bottomOffset = (20 * (index-1));
-            if(bottomOffset > 60) bottomOffset = 60;
-            
-            card.style.bottom = "calc(" +  bottomOffset + "px" + " + 9rem)";
-            if(document.body.clientWidth <= 850) card.style.bottom = "calc(" +  bottomOffset + "px" + " + 6rem)";
-            if(document.body.clientWidth <= 660) card.style.bottom = "calc(" +  bottomOffset + "px" + " + 6.5rem)";
+            let bottomOffset = (20 * (index - 1));
+            if (bottomOffset > 60) bottomOffset = 60;
 
+            card.style.bottom = "calc(" + bottomOffset + "px" + " + 9rem)";
+            if (document.body.clientWidth <= 850) card.style.bottom = "calc(" + bottomOffset + "px" + " + 6rem)";
+            if (document.body.clientWidth <= 660) card.style.bottom = "calc(" + bottomOffset + "px" + " + 6.5rem)";
+
+
+            // lazy loading of images and song previews
+            let srcData = card.querySelector(".tinder-card-image").getAttribute("srcData");
+            if (index <= 10 && srcData) {
+                card.querySelector(".tinder-card-image").setAttribute("src", srcData);
+            }
+
+            let audioPreviewSrc = card.getAttribute("audioPreviewSrc");
+            if (index <= 10 && audioPreviewSrc) {
+                let newAudio = document.createElement("audio");
+                newAudio.setAttribute("src", audioPreviewSrc);
+                card.appendChild(newAudio);
+            }
         });
 
         document.getElementById("manage-current-tinder-container").classList.add('loaded');
@@ -164,6 +183,8 @@ async function manageCurrent() {
             if (keep) {
                 event.target.style.transform = '';
             } else {
+                deleteLastRemovedCard();
+
                 let endX = Math.max(Math.abs(event.velocityX) * moveOutWidth, moveOutWidth);
                 let toX = event.deltaX > 0 ? endX : -endX;
                 let endY = Math.abs(event.velocityY) * moveOutWidth;
@@ -175,13 +196,14 @@ async function manageCurrent() {
                 // event.target.style.transform = 'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
 
                 moveOutWidth = document.body.clientWidth * 1.5;
-                if(toX < 0) moveOutWidth *= -1;
+                if (toX < 0) moveOutWidth *= -1;
                 event.target.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
 
                 stopAllAudio();
                 initCards();
 
-                document.getElementById("manage-current-playlist-tracks").textContent = document.querySelectorAll('#tinder-cards-container .tinder--card.removed').length + 1 + " / " + tracks.length;
+                // show track progress in corner
+                updateProgress();
 
                 if (toX < 0) {
                     let songURI = el.getAttribute("song-uri");
@@ -196,6 +218,8 @@ async function manageCurrent() {
 
     function createButtonListener(love) {
         return function (event) {
+            deleteLastRemovedCard();
+
             let cards = document.querySelectorAll('#tinder-cards-container .tinder--card:not(.removed)');
             let moveOutWidth = document.body.clientWidth * 1.5;
 
@@ -217,7 +241,10 @@ async function manageCurrent() {
 
             stopAllAudio();
             initCards();
-            document.getElementById("manage-current-playlist-tracks").textContent = document.querySelectorAll('#tinder-cards-container .tinder--card.removed').length + 1 + " / " + tracks.length;
+
+            // show track progress in corner
+            updateProgress();
+
             event.preventDefault();
         };
     }
@@ -256,6 +283,19 @@ async function manageCurrent() {
         let playlistName = document.getElementById("manage-current-playlist-title").textContent;
         if (removeFromPlaylist.length > 0) createAlert(`Removed ${removeFromPlaylist.length} Tracks from ${playlistName}.`, "success");
         else createAlert(`Kept all tracks in ${playlistName}.`, "success");
+    }
+
+    function deleteLastRemovedCard() {
+        let deletingChildren = document.querySelectorAll("#tinder-cards-container .tinder--card.removed");
+        let container = document.querySelector("#tinder-cards-container");
+        deletingChildren.forEach(child => {
+            container.removeChild(child);
+        });
+    }
+
+    function updateProgress() {
+        let notRemovedCards = document.querySelectorAll('#tinder-cards-container .tinder--card:not(.removed)');
+        document.getElementById("manage-current-playlist-tracks").textContent = (tracks.length - notRemovedCards.length + 2) + " / " + tracks.length;
     }
 
 

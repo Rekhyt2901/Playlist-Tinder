@@ -63,6 +63,7 @@ body, .wrapper {
     transition: top 0.4s, opacity 0.4s;
     left: 50%;
     transform: translate(-50%, 0);
+    width: 50%;
 }
 
 html::-webkit-scrollbar {

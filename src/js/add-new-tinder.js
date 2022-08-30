@@ -94,10 +94,6 @@ async function addNewTinder() {
         return !hasIt;
     });
 
-    // show track progress in corner
-    document.getElementById("add-new-playlist-tracks").textContent = document.querySelectorAll('#add-new-tinder-cards-container .tinder--card.removed').length + 1 + " / " + tracks.length;
-
-
 
     // Remove old cards
     while (document.getElementById("add-new-tinder-cards-container").childElementCount > 1) {
@@ -110,35 +106,40 @@ async function addNewTinder() {
         node.setAttribute("id", "");
 
         if (!track.track) continue;
-        if (track.track.album.images.length > 0) node.querySelector(".tinder-card-image").setAttribute("src", track.track.album.images[0].url);
+
+        // if (track.track.album.images.length > 0) node.querySelector(".tinder-card-image").setAttribute("src", track.track.album.images[0].url);
+        if (track.track.album.images.length > 0) node.querySelector(".tinder-card-image").setAttribute("srcData", track.track.album.images[0].url);
+
         node.querySelector(".tinder-card-title").textContent = track.track.name;
 
         let artists = track.track.artists.reduce((a, c) => a + c.name + ", ", "");
         node.querySelector(".tinder-card-artists").textContent = artists.slice(0, -2);
 
-        
+
         let songPreview = track.track.preview_url;
         // preview is unavailable
         if (songPreview == null) {
             let icon = node.querySelector(".play-preview i");
             icon.classList.remove("bi-play-circle-fill");
             icon.classList.add("bi-exclamation-circle-fill");
-            
+
             icon.setAttribute("data-bs-toggle", "tooltip");
             icon.setAttribute("data-bs-title", "Preview is Unavailable");
             icon.setAttribute("data-bs-placement", "top");
             new Tooltip(icon);
         } else {
             // create audio element
-            let newAudio = document.createElement("audio");
-            newAudio.setAttribute("src", songPreview);
-            node.appendChild(newAudio);
+            node.setAttribute("audioPreviewSrc", songPreview);
+
+            // let newAudio = document.createElement("audio");
+            // newAudio.setAttribute("src", songPreview);
+            // node.appendChild(newAudio);
         }
 
 
         node.querySelector(".play-preview").onclick = () => {
             let icon = node.querySelector(".play-preview i");
-            if(icon.classList.contains("bi-exclamation-circle-fill")) return;
+            if (icon.classList.contains("bi-exclamation-circle-fill")) return;
             if (icon.classList.contains("bi-play-circle-fill")) {
                 stopAllAudio();
 
@@ -158,6 +159,9 @@ async function addNewTinder() {
         document.getElementById("add-new-tinder-cards-container").append(node);
     }
 
+    // show track progress in corner
+    updateProgress();
+
     // TINDER //
     let allCards = document.querySelectorAll('#add-new-tinder-cards-container .tinder--card');
     function initCards() {
@@ -170,14 +174,27 @@ async function addNewTinder() {
             if (scale < 0.1) scale = 0.1;
 
             card.style.transform = 'scale(' + scale + ')';
-            
-            let bottomOffset = (20 * (index-1));
-            if(bottomOffset > 60) bottomOffset = 60;
 
-            card.style.bottom = "calc(" +  bottomOffset + "px" + " + 9rem)";
-            if(document.body.clientWidth <= 850) card.style.bottom = "calc(" +  bottomOffset + "px" + " + 6rem)";
-            if(document.body.clientWidth <= 660) card.style.bottom = "calc(" +  bottomOffset + "px" + " + 7rem)";
+            let bottomOffset = (20 * (index - 1));
+            if (bottomOffset > 60) bottomOffset = 60;
 
+            card.style.bottom = "calc(" + bottomOffset + "px" + " + 9rem)";
+            if (document.body.clientWidth <= 850) card.style.bottom = "calc(" + bottomOffset + "px" + " + 6rem)";
+            if (document.body.clientWidth <= 660) card.style.bottom = "calc(" + bottomOffset + "px" + " + 7rem)";
+
+
+            // lazy loading of images and song previews
+            let srcData = card.querySelector(".tinder-card-image").getAttribute("srcData");
+            if (index <= 10 && srcData) {
+                card.querySelector(".tinder-card-image").setAttribute("src", srcData);
+            }
+
+            let audioPreviewSrc = card.getAttribute("audioPreviewSrc");
+            if (index <= 10 && audioPreviewSrc) {
+                let newAudio = document.createElement("audio");
+                newAudio.setAttribute("src", audioPreviewSrc);
+                card.appendChild(newAudio);
+            }
         });
 
         document.getElementById("add-new-tinder-container").classList.add('loaded');
@@ -208,11 +225,15 @@ async function addNewTinder() {
             let moveOutWidth = document.body.clientWidth;
             let keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;
 
-            event.target.classList.toggle('removed', !keep);
-
+            
             if (keep) {
+                event.target.classList.toggle('removed', !keep);
                 event.target.style.transform = '';
             } else {
+                deleteLastRemovedCard();
+
+                event.target.classList.toggle('removed', !keep);
+
                 let endX = Math.max(Math.abs(event.velocityX) * moveOutWidth, moveOutWidth);
                 let toX = event.deltaX > 0 ? endX : -endX;
                 let endY = Math.abs(event.velocityY) * moveOutWidth;
@@ -224,13 +245,13 @@ async function addNewTinder() {
                 // event.target.style.transform = 'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
 
                 moveOutWidth = document.body.clientWidth * 1.5;
-                if(toX < 0) moveOutWidth *= -1;
+                if (toX < 0) moveOutWidth *= -1;
                 event.target.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
 
                 stopAllAudio();
                 initCards();
 
-                document.getElementById("add-new-playlist-tracks").textContent = document.querySelectorAll('#add-new-tinder-cards-container .tinder--card.removed').length + 1 + " / " + tracks.length;
+                updateProgress()
 
                 if (toX > 0) {
                     let songURI = el.getAttribute("song-uri");
@@ -245,6 +266,8 @@ async function addNewTinder() {
 
     function createButtonListener(love) {
         return function (event) {
+            deleteLastRemovedCard();
+            
             let cards = document.querySelectorAll('#add-new-tinder-cards-container .tinder--card:not(.removed)');
             let moveOutWidth = document.body.clientWidth * 1.5;
 
@@ -266,7 +289,9 @@ async function addNewTinder() {
 
             stopAllAudio();
             initCards();
-            document.getElementById("add-new-playlist-tracks").textContent = document.querySelectorAll('#add-new-tinder-cards-container .tinder--card.removed').length + 1 + " / " + tracks.length;
+
+            updateProgress();
+
             event.preventDefault();
         };
     }
@@ -312,6 +337,19 @@ async function addNewTinder() {
         let playlistName = document.getElementById("add-new-playlist-title").textContent;
         if (addToPlaylist.length > 0) createAlert(`Added ${addToPlaylist.length} Tracks to ${playlistName}.`, "success");
         else createAlert(`Added no tracks to ${playlistName}.`, "success");
+    }
+
+    function deleteLastRemovedCard() {
+        let deletingChildren = document.querySelectorAll("#add-new-tinder-cards-container .tinder--card.removed");
+        let container = document.querySelector("#add-new-tinder-cards-container");
+        deletingChildren.forEach(child => {
+            container.removeChild(child);
+        });
+    }
+
+    function updateProgress() {
+        let notRemovedCards = document.querySelectorAll('#add-new-tinder-cards-container .tinder--card:not(.removed)');
+        document.getElementById("add-new-playlist-tracks").textContent = (tracks.length - notRemovedCards.length + 2) + " / " + tracks.length;
     }
 
 

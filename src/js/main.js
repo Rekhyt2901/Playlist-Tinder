@@ -46,18 +46,27 @@ async function init() {
             // document.getElementById("content").style.display = "";
             // document.getElementById("loading").style.display = "none";
 
-            setTimeout(obtainNewToken, expires - Date.now() - 100000);
-            main();
+            if(expires - Date.now() <= 0) {
+                await obtainNewToken();
+                main();
+                return;                
+            } else {
+                setTimeout(obtainNewToken, expires - Date.now() - 100000);
+                main();
+                return;
+            }
         } else {
             // render initial screen
             document.getElementById('login').style.display = "flex";
             document.getElementById("content").style.display = "none";
             document.getElementById("loading").style.display = "none";
+            return;
         }
     }
 }
 
 async function main() {
+    // createAlert("test tst tesgzgzb zg zg z z gz gz gz t", "success");
 
     let profile = await APIGet("me");
 
