@@ -5,9 +5,10 @@ const cookieParser = require("cookie-parser");
 const fetch = require("node-fetch");
 const fs = require("fs");
 
+const port = 3002;
+
 const host = "spotify-tinder.alexkleyn.de";
 // const host = "127.0.0.1";
-const port = 3002;
 const domain = "https://spotify-tinder.alexkleyn.de";
 // const domain = "http://localhost";
 const clientPort = 443;

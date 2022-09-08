@@ -59,8 +59,6 @@ async function manageCurrent() {
         node.setAttribute("id", "");
 
         if (!track.track) continue;
-
-        // if (track.track.album.images.length > 0) node.querySelector(".tinder-card-image").setAttribute("src", track.track.album.images[0].url);
         if (track.track.album.images.length > 0) node.querySelector(".tinder-card-image").setAttribute("srcData", track.track.album.images[0].url);
 
         node.querySelector(".tinder-card-title").textContent = track.track.name;
@@ -176,7 +174,7 @@ async function manageCurrent() {
             el.classList.remove('moving');
 
             let moveOutWidth = document.body.clientWidth;
-            let keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;
+            let keep = Math.abs(event.deltaX) < 90 || Math.abs(event.velocityX) < 0.25;
 
             event.target.classList.toggle('removed', !keep);
 

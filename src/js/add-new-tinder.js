@@ -223,7 +223,7 @@ async function addNewTinder() {
             el.classList.remove('moving');
 
             let moveOutWidth = document.body.clientWidth;
-            let keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;
+            let keep = Math.abs(event.deltaX) < 90 || Math.abs(event.velocityX) < 0.25;
 
             
             if (keep) {
